@@ -1,0 +1,31 @@
+<head>
+  <title>teevee</title>
+</head>
+
+<body>
+  <h1>Teevee</h1>
+  
+  {{> search}}
+  
+  <ul>
+    {{#each episodes}}
+      {{> episode}}
+    {{/each}}
+  </ul>
+</body>
+
+<template name="search">
+  <form class="search_for_show_form" method="get">
+    <input type="text" name="searchForShow" class="form-control typeahead" autocomplete="off" spellcheck="off" data-source="searchForShow">
+  </form>  
+</template>
+
+<template name="episode">
+  <li>
+    <input type="checkbox" name="{{slug}}" id="{{_id}}" checked="{{seen}}" class="episode-checkbox">
+    <label for="{{_id}}">
+      <strong class="show-formatted-season-episode">{{formatted_season_and_episode}}</strong>
+      <span class="show-name">{{name}}</span>
+    </label>
+  </li>
+</template>
