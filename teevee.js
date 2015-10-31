@@ -35,16 +35,23 @@ if (Meteor.isClient) {
 
 
   Template.episode_list.helpers({
-    episodes: () => {
+    seasons: () => {
       let show = Shows.findOne({ id: Session.get('show_id') });
-      return show ? show.episodes : undefined;
+      if (!show) return undefined;
+      console.log("Returning", _.groupBy(show.episodes, 'season'))
+      return _.values(_.groupBy(show.episodes, 'season'));
     }
   });
   
   Template.show_info.helpers({
     tv_show: () => {
       return Shows.findOne({ id: Session.get('show_id') });
+    },
+    formatted_genre: () => {
+      let show = Shows.findOne({ id: Session.get('show_id') });
+      return show.genres.join(', ');
     }
+
   });
 
   Template.episode.events({
@@ -63,9 +70,16 @@ if (Meteor.isClient) {
         
         // Format API response for typeahead list.
         let show_names = response.data.map( (result) => { 
+          let show = result.show;
+          
+          // Show the country code as part of the name if not US.
+          if ( show.network && show.network.country && show.network.country.code && show.network.country.code !== 'US') {
+            show.name += ` (${show.network.country.code})`
+          }
+          
           return { 
-            value:  result.show.name, 
-            id:     result.show.id
+            value:    show.name, 
+            id:       show.id
           };
         });
         
@@ -112,22 +126,24 @@ if (Meteor.isClient) {
       });
     }
   });
+  // Private methods
+
+  function get_show_info(show_id) {
+    return new Promise( (resolve, reject) => {
+      Meteor.http.call("GET", TV_API.get_show(show_id), (err, response) => {
+        if (err) return reject(err);
+        resolve(response.data);
+      });
+    });
+  }
+
+  function get_episodes(show_id) {
+    return new Promise( (resolve, reject) => {
+      Meteor.http.call("GET", TV_API.get_episodes(show_id), (err, response) => {
+        if (err) return reject(err);
+        resolve(response.data);
+      });
+    });
+  }
 }
 
-function get_show_info(show_id) {
-  return new Promise( (resolve, reject) => {
-    Meteor.http.call("GET", TV_API.get_show(show_id), (err, response) => {
-      if (err) return reject(err);
-      resolve(response.data);
-    });
-  });
-}
-
-function get_episodes(show_id) {
-  return new Promise( (resolve, reject) => {
-    Meteor.http.call("GET", TV_API.get_episodes(show_id), (err, response) => {
-      if (err) return reject(err);
-      resolve(response.data);
-    });
-  });
-}

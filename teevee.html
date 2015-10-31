@@ -24,6 +24,17 @@
 <template name='show_info'>
   {{#if tv_show}}
     <div class="card show-info">
+      <div class="show-image">
+        <img src="{{tv_show.image.original}}">
+      </div>
+      <div class="show-description">
+        <h4 class='show-name'>{{tv_show.name}}</h4>
+        <h6 class='show-genre'>{{formatted_genre}}</h6>
+        {{{tv_show.summary}}}
+        
+        <h6 class='show-status {{tv_show.status}}'>{{tv_show.status}}</h6>
+        
+      </div>
       
     </div>
   {{/if}}
@@ -31,23 +42,29 @@
 
 
 <template name='episode_list'>
-  {{#if episodes}}
+  {{#if seasons}}
     <div class="card episode-list">
-      <ul>
-        {{#each episodes}}
-          {{> episode}}
-        {{/each}}
-      </ul>
+      {{#each seasons}}
+        {{> season}}
+      {{/each}}
     </div>
   {{/if}}
+</template>
+
+<template name='season'>
+  <h4>Season {{this.[0].season}}</h4>
+  <ul>
+    {{#each this}}
+      {{> episode}}
+    {{/each}}
+  </ul>
 </template>
 
 <template name='episode'>
   <li>
     <input type='checkbox' name='{{name}}' id='{{id}}' checked='true' class='episode-checkbox'>
     <label for='{{id}}'>
-      <strong class='show-formatted-season-episode'>{{season}}</strong>
-      <span class='show-name'>{{name}}</span>
+      <strong class='show-formatted-season-episode'>S{{season}}E{{number}}</strong> - <span class='show-name'>{{name}}</span>
     </label>
   </li>
 </template>

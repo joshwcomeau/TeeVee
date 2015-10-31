@@ -88,14 +88,80 @@ header {
 }
 
 .show-info {
+  display: flex;
+  
+  .show-image {
+    flex: 0 0 200px;
+    
+    img {
+      width: 100%;
+      border-radius: 3px;
+    }
+  }
+  
+  .show-description {
+    flex: 1;
+    padding: 0 1.5rem;
+    
+    h4 {
+      font-size: 2rem;
+      color: $olive;
+      font-weight: $fw-heavy;
+    }
+    h6 {
+      font-size: 1.2rem;
+      color: #333;
+      font-weight: $fw-heavy;
+      margin-top: 0.5rem;
+    }
+    p {
+      font-size: 1.1rem;
+      line-height: 1.4em;
+      margin: 1rem 0;
+    }
+    
+    .show-status {
+      font-size: 1rem;
+      font-weight: $fw-normal;
+      
+      &.Ended {
+        color: $crimson;
+      }
+      &.Running {
+        color: $olive;
+      }
+    }
+  }
   
 }
 
 .episode-list {
+  -webkit-column-count: 2;
+  -moz-column-count: 2;
+  column-count: 2;
+  
+  h4 {
+    font-size: 1.4rem;
+    margin-top: 1rem;
+  }
+  
   ul {
-    -webkit-column-count: 2;
-    -moz-column-count: 2;
-    column-count: 2;
+    padding: 0.6rem 0;
+    
+    li {
+      padding: 0.25rem 0;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+      
+      &:last-of-type {
+        border-bottom: 0;
+      }
+    }
+  }
+  
+  .show-formatted-season-episode {
+    font-size: 0.8rem;
+    font-weight: $fw-heavy;
+    color: #333;
   }
 }
 
