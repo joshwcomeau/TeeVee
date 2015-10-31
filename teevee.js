@@ -2,20 +2,14 @@ Episodes = new Mongo.Collection('episodes');
 
 // Using TVMAZE API for all TV show lookups.
 const TV_API = {
-  search: 'http://api.tvmaze.com/search/shows?q='
+  search: (query) => {
+    return `http://api.tvmaze.com/search/shows?q=${query}`
+  }
 };
 
 if (Meteor.isServer) {
   
   Meteor.methods({
-    searchForShow: function(query, options) {
-      options = options || {};
-      let api_url = TV_API.search+query;
-      // this.unblock();
-
-      return Meteor.http.call("GET", api_url);
-      
-    },
     getShowEpisodes: function(show_id) {
       
     }
@@ -27,8 +21,6 @@ if (Meteor.isClient) {
     Meteor.typeahead.inject();
   });
 
-  // counter starts at 0
-  Session.setDefault('counter', 0);
 
   Template.body.helpers({
     episodes: () => {
@@ -46,17 +38,18 @@ if (Meteor.isClient) {
   
   Template.search.helpers({
     searchForShow: function(query, sync, callback) {
-      console.log("Search helper fired!");
-      Meteor.call('searchForShow', query, {}, function(err, response) {
+      Meteor.http.call("GET", TV_API.search(query), (err, response) => {
         if (err) return console.log("Found error:", err);
         
-        console.log("Context", this);
-        console.log("Response:", response);
-        
         // Format API response for typeahead list.
-        let show_names = response.map( (show) => { 
-          { value: show.name }
+        let show_names = response.data.map( (result) => { 
+          return { 
+            value:  result.show.name, 
+            id:     result.show.id
+          };
         });
+        
+        console.log("Found show names:", show_names)
         
         return callback( show_names );
       });
