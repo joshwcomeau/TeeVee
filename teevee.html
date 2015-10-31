@@ -1,31 +1,40 @@
 <head>
-  <title>teevee</title>
+  <meta charset="utf-8">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,900,300' rel='stylesheet' type='text/css'>
+  <title>TeeVee</title>
 </head>
 
 <body>
-  <h1>Teevee</h1>
-  
-  {{> search}}
-  
-  <ul>
-    {{#each episodes}}
-      {{> episode}}
-    {{/each}}
-  </ul>
+  <div class='wrapper'>
+    <div class="card">
+      <h1 class='logo'>Teevee</h1>
+      
+      {{> search}}  
+    </div>
+    
+    <div class="card">
+      <ul>
+        {{#each episodes}}
+          {{> episode}}
+        {{/each}}
+      </ul>
+    </div>
+    
+  </div>
 </body>
 
-<template name="search">
-  <form class="search_for_show_form" method="get">
-    <input type="text" name="searchForShow" class="form-control typeahead" autocomplete="off" spellcheck="off" data-source="searchForShow">
+<template name='search'>
+  <form class='search_for_show_form' method='get'>
+    <input type='text' name='searchForShow' class='search-for-show typeahead' autocomplete='off' spellcheck='off' data-source='searchForShow'>
   </form>  
 </template>
 
-<template name="episode">
+<template name='episode'>
   <li>
-    <input type="checkbox" name="{{slug}}" id="{{_id}}" checked="{{seen}}" class="episode-checkbox">
-    <label for="{{_id}}">
-      <strong class="show-formatted-season-episode">{{formatted_season_and_episode}}</strong>
-      <span class="show-name">{{name}}</span>
+    <input type='checkbox' name='{{slug}}' id='{{_id}}' checked='{{seen}}' class='episode-checkbox'>
+    <label for='{{_id}}'>
+      <strong class='show-formatted-season-episode'>{{formatted_season_and_episode}}</strong>
+      <span class='show-name'>{{name}}</span>
     </label>
   </li>
 </template>

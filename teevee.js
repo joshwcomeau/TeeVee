@@ -49,8 +49,6 @@ if (Meteor.isClient) {
           };
         });
         
-        console.log("Found show names:", show_names)
-        
         return callback( show_names );
       });
     }
