@@ -12,14 +12,7 @@
       {{> search}}  
     </div>
     
-    <div class="card">
-      <ul>
-        {{#each episodes}}
-          {{> episode}}
-        {{/each}}
-      </ul>
-    </div>
-    
+    {{> episode_list}}
   </div>
 </body>
 
@@ -29,11 +22,21 @@
   </form>  
 </template>
 
+<template name='episode_list'>
+  <div class="card">
+    <ul>
+      {{#each episodes}}
+        {{> episode}}
+      {{/each}}
+    </ul>
+  </div>
+</template>
+
 <template name='episode'>
   <li>
-    <input type='checkbox' name='{{slug}}' id='{{_id}}' checked='{{seen}}' class='episode-checkbox'>
-    <label for='{{_id}}'>
-      <strong class='show-formatted-season-episode'>{{formatted_season_and_episode}}</strong>
+    <input type='checkbox' name='{{name}}' id='{{id}}' checked='true' class='episode-checkbox'>
+    <label for='{{id}}'>
+      <strong class='show-formatted-season-episode'>{{season}}</strong>
       <span class='show-name'>{{name}}</span>
     </label>
   </li>

@@ -1,5 +1,8 @@
 Episodes = new Mongo.Collection('episodes');
 
+// Local-only Collection
+Shows = new Mongo.Collection(null);
+
 // Using TVMAZE API for all TV show lookups.
 const TV_API = {
   search: (query) => {
@@ -13,8 +16,9 @@ const TV_API = {
   }
 };
 
+
+
 if (Meteor.isServer) {
-  
   Meteor.methods({
     getShowEpisodes: function(show_id) {
       
@@ -22,15 +26,17 @@ if (Meteor.isServer) {
   });
 }
 
+
+
 if (Meteor.isClient) {
   Meteor.startup(function () {
     Meteor.typeahead.inject();
   });
 
 
-  Template.body.helpers({
+  Template.episode_list.helpers({
     episodes: () => {
-      return Episodes.find({});
+      return Shows.findOne({ id: Session.get('show_id') }).episodes;
     }
   });
 
@@ -62,12 +68,13 @@ if (Meteor.isClient) {
     
     // Select a show; show all the episodes and their status
     goToShow: function(ev, suggestion, dataset) {
-      console.log("Selected", suggestion);
       // We need to do a few things here:
       // - retrieve full show details from API
       // - retrieve episode list from API
       // - retrieve our `seen` data from Mongo
       // - set our local Session state variables
+      
+      // TODO: Cache the requested show info so I don't have to re-fetch every time.
       
       
       // Retrieve Show info and episodes
@@ -75,8 +82,23 @@ if (Meteor.isClient) {
       let episodes_promise  = get_episodes(suggestion.id);
       
       Promise.all([show_info_promise, episodes_promise]).then( (values) => {
-        let episodes = values[0];
-        let show_info = values[1]
+        let show_info = values[0];
+        let episodes  = values[1];
+        
+        // Trim and combine the API response into something more manageable
+        let trimmed_show = _.pick(show_info, 'id', 'name', 'type', 'genres', 'status', 'image', 'summary');
+        trimmed_show.episodes = _.map(episodes, (episode) => {
+          return _.pick(episode, 'id', 'name', 'season', 'number', 'airdate', 'summary');
+        });
+        
+        Shows.insert(trimmed_show);
+        
+        Session.set('show_id', trimmed_show.id);
+        
+        console.log(Shows.findOne({}).episodes)
+        
+        
+        
         console.log("All done", values);
       }, (reason) => {
         console.log("FAILED to fetch TV show info:", reason)
