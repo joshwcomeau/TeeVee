@@ -6,30 +6,40 @@
 
 <body>
   <div class='wrapper'>
-    <div class="card">
-      <h1 class='logo'>Teevee</h1>
-      
-      {{> search}}  
-    </div>
     
-    {{> episode_list}}
+    {{> search }}  
+    {{> show_info }}
+    
+    {{> episode_list }}
   </div>
 </body>
 
 <template name='search'>
-  <form class='search_for_show_form' method='get'>
+  <header class="card">
+    <h1 class='logo'>Teevee</h1>
     <input type='text' name='search_for_show' class='search-for-show typeahead' autocomplete='off' spellcheck='off' data-source='retrieveSuggestions' data-select='goToShow'>
-  </form>  
+  </header>
 </template>
 
+<template name='show_info'>
+  {{#if tv_show}}
+    <div class="card show-info">
+      
+    </div>
+  {{/if}}
+</template>
+
+
 <template name='episode_list'>
-  <div class="card">
-    <ul>
-      {{#each episodes}}
-        {{> episode}}
-      {{/each}}
-    </ul>
-  </div>
+  {{#if episodes}}
+    <div class="card episode-list">
+      <ul>
+        {{#each episodes}}
+          {{> episode}}
+        {{/each}}
+      </ul>
+    </div>
+  {{/if}}
 </template>
 
 <template name='episode'>

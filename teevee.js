@@ -36,7 +36,14 @@ if (Meteor.isClient) {
 
   Template.episode_list.helpers({
     episodes: () => {
-      return Shows.findOne({ id: Session.get('show_id') }).episodes;
+      let show = Shows.findOne({ id: Session.get('show_id') });
+      return show ? show.episodes : undefined;
+    }
+  });
+  
+  Template.show_info.helpers({
+    tv_show: () => {
+      return Shows.findOne({ id: Session.get('show_id') });
     }
   });
 
@@ -95,7 +102,7 @@ if (Meteor.isClient) {
         
         Session.set('show_id', trimmed_show.id);
         
-        console.log(Shows.findOne({}).episodes)
+        console.log(Shows.findOne({}))
         
         
         
