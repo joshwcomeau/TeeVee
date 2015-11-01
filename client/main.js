@@ -1,8 +1,9 @@
 _ = lodash;
 SeenEpisodes = new Mongo.Collection('seen_episodes');
 
-// Local-only Collection
+// Local-only Collections
 Shows     = new Mongo.Collection(null);
+Seasons   = new Mongo.Collection(null);
 Episodes  = new Mongo.Collection(null);
 
 // Using TVMAZE API for all TV show lookups.
@@ -25,18 +26,28 @@ Meteor.startup(function () {
 
 
 Template.season_list.helpers({
-  seasons: () => {
-    let episodes = Episodes.find({ showId: Session.get('show_id') }).fetch();
-    if (!episodes) return undefined;
-    return _.values(_.groupBy(episodes, 'season'));
+  seasons: function() {
+    return Seasons.find({
+      showId: Session.get('show_id')
+    });
+  }
+});
+
+Template.season.helpers({
+  episodes: function() {
+    console.log("CONTEXT", this)
+    return Episodes.find({
+      showId: Session.get('show_id'),
+      season: this.number
+    });
   }
 });
 
 Template.show_info.helpers({
-  tv_show: () => {
+  tv_show: function() {
     return Shows.findOne( Session.get('show_id') );
   },
-  formatted_genre: () => {
+  formatted_genre: function() {
     let show = Shows.findOne( Session.get('show_id') );
     return show.genres.join(', ');
   }
@@ -129,23 +140,33 @@ Template.search.helpers({
       // Used in the `show_info` template
       Shows.insert(show_info);
       
+      // Group episodes by season
+      let seasons = _.values(_.groupBy(episodes, 'season'));
       
-      // Format episodes and create a bunch of them
-      episodes.forEach( (episode) => {
-        // point to its parent show
-        episode.showId = show_id;
-        
-        // Figure out if this user has seen this episode
-        let seen_episode = SeenEpisodes.findOne({
-          userId: Meteor.user()._id,
-          episodeId: episode.id
+      seasons.forEach( (episodes_per_season) => {
+        Seasons.insert({
+          showId: show_id,
+          number: episodes_per_season[0].season,
+          length: episodes_per_season.length
         });
-        episode.seen = seen_episode ? seen_episode.seen : false;
         
-        // Insert it into our local (front-end) DB.
-        // Used in the `season_list` template (and nested templates below)
-        Episodes.insert(episode)
-        
+        episodes_per_season.forEach( (episode) => {
+          // point to its parent show
+          episode.showId = show_id;
+          
+          // Figure out if this user has seen this episode
+          let seen_episode = SeenEpisodes.findOne({
+            userId: Meteor.user()._id,
+            episodeId: episode.id
+          });
+          
+          episode.seen = seen_episode ? seen_episode.seen : false;
+          
+          // Insert it into our local (front-end) DB.
+          // Used in the `season_list` template (and nested templates below)
+          Episodes.insert(episode)
+          
+        });
       });
               
       // Update the session, so we can easily look this show and these episodes

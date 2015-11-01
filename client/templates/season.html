@@ -1,9 +1,9 @@
 <template name='season'>
-  <h4>Season {{this.[0].season}}</h4>
+  <h4>Season {{number}}</h4>
   <button type="button" class="mark all">All</button>
   <button type="button" class="mark none">None</button>
   <ul>
-    {{#each this}}
+    {{#each episodes}}
       {{> episode}}
     {{/each}}
   </ul>
