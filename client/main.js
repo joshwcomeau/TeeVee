@@ -30,12 +30,14 @@ Template.season_list.helpers({
     return Seasons.find({
       showId: Session.get('show_id')
     });
+  },
+  loaded: function() {
+    return Session.get('show_id');
   }
 });
 
 Template.season.helpers({
   episodes: function() {
-    console.log("CONTEXT", this)
     return Episodes.find({
       showId: Session.get('show_id'),
       season: this.number
@@ -45,28 +47,18 @@ Template.season.helpers({
 
 Template.show_info.helpers({
   tv_show: function() {
-    return Shows.findOne( Session.get('show_id') );
+    return Shows.findOne( { id: Session.get('show_id') } );
   },
   formatted_genre: function() {
-    let show = Shows.findOne( Session.get('show_id') );
+    let show = Shows.findOne( { id: Session.get('show_id') } );
     return show.genres.join(', ');
   }
 
 });
 
 Template.season.events({
-  'click .mark.all': function(ev) {
-    // Create a new copy of the episodes array, mark them all as seen.
-    let episodes = _.map(this, (episode) => {
-      episode.seen = true;
-      return episode;
-    });
-    
-    let show = Shows.findOne({ id: Session.get('show_id')});
-    Shows.update(show._id, {
-      $set: { episodes: episodes }
-    });
-
+  'click .mark': function(ev) {
+    alert('Coming soon!');
   }
 })
 
