@@ -7,10 +7,16 @@
 <body>
   <div class='wrapper'>
     
-    {{> search }}  
-    {{> show_info }}
-    
-    {{> episode_list }}
+    <div class="authenticated {{#unless currentUser}}is-hidden{{/unless}}">
+      {{> search }}  
+      {{> show_info }}
+      
+      {{> episode_list }}
+    </div>
+    <div class="unauthenticated {{#if currentUser}}is-hidden{{/if}}">
+      {{> loginButtons}}
+    </div>
+      
   </div>
 </body>
 
@@ -62,7 +68,7 @@
 
 <template name='episode'>
   <li>
-    <input type='checkbox' name='{{name}}' id='{{id}}' checked='true' class='episode-checkbox'>
+    <input type='checkbox' name='{{name}}' id='{{id}}' checked='{{seen}}' class='episode-checkbox'>
     <label for='{{id}}'>
       <strong class='show-formatted-season-episode'>S{{season}}E{{number}}</strong> - <span class='show-name'>{{name}}</span>
     </label>

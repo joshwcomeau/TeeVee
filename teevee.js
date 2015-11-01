@@ -1,4 +1,5 @@
 Episodes = new Mongo.Collection('episodes');
+SeenEpisodes = new Mongo.Collection('seen_episodes');
 
 // Local-only Collection
 Shows = new Mongo.Collection(null);
@@ -20,8 +21,11 @@ const TV_API = {
 
 if (Meteor.isServer) {
   Meteor.methods({
-    getShowEpisodes: function(show_id) {
-      
+    ToggleSeenEpisode: function(query, seen) {
+      console
+      return SeenEpisodes.upsert(query, {
+        $set: { seen: seen }
+      });
     }
   });
 }
@@ -36,9 +40,10 @@ if (Meteor.isClient) {
 
   Template.episode_list.helpers({
     seasons: () => {
+      console.log("Getting seasons info")
       let show = Shows.findOne({ id: Session.get('show_id') });
       if (!show) return undefined;
-      console.log("Returning", _.groupBy(show.episodes, 'season'))
+
       return _.values(_.groupBy(show.episodes, 'season'));
     }
   });
@@ -56,9 +61,15 @@ if (Meteor.isClient) {
 
   Template.episode.events({
     'change .episode-checkbox': function (ev) {
-      Episodes.update(this._id, { 
-        $set: { seen: !this.seen } 
-      });
+      
+      // Check to see if this episode has a database entry already for this user
+      let query = {
+        userId:     Meteor.user()._id,
+        showId:     this.show_id,
+        episodeId:  this.id
+      }
+      
+      Meteor.call('ToggleSeenEpisode', query, $(ev.target).is(":checked"));      
     }
   });
   
@@ -101,6 +112,7 @@ if (Meteor.isClient) {
       // Retrieve Show info and episodes
       let show_info_promise = get_show_info(suggestion.id);
       let episodes_promise  = get_episodes(suggestion.id);
+      let seen_episodes_promise = fetch_seen_episodes(suggestion.id);
       
       Promise.all([show_info_promise, episodes_promise]).then( (values) => {
         let show_info = values[0];
@@ -109,24 +121,39 @@ if (Meteor.isClient) {
         // Trim and combine the API response into something more manageable
         let trimmed_show = _.pick(show_info, 'id', 'name', 'type', 'genres', 'status', 'image', 'summary');
         trimmed_show.episodes = _.map(episodes, (episode) => {
-          return _.pick(episode, 'id', 'name', 'season', 'number', 'airdate', 'summary');
+          let trimmed_episode = _.pick(episode, 'id', 'name', 'season', 'number', 'airdate', 'summary');
+          // Attach some basic show info to each episode
+          trimmed_episode.show_id = trimmed_show.id;
+          trimmed_episode.show_name = trimmed_show.name;
+          
+          // Figure out if this user has seen this episode
+          let seen_episode = SeenEpisodes.findOne({ 
+            userId: Meteor.user()._id, 
+            episodeId: trimmed_episode.id
+          });
+          
+          if ( seen_episode ) {
+            trimmed_episode.seen = seen_episode.seen;
+          }
+
+          return trimmed_episode;
         });
+        console.log("Inserting shows")
         
         Shows.insert(trimmed_show);
         
         Session.set('show_id', trimmed_show.id);
         
-        console.log(Shows.findOne({}))
-        
-        
-        
-        console.log("All done", values);
       }, (reason) => {
         console.log("FAILED to fetch TV show info:", reason)
       });
     }
   });
-  // Private methods
+  
+
+  
+  
+  // Private Client methods
 
   function get_show_info(show_id) {
     return new Promise( (resolve, reject) => {
@@ -144,6 +171,10 @@ if (Meteor.isClient) {
         resolve(response.data);
       });
     });
+  }
+  
+  function fetch_seen_episodes(show_id) {
+    
   }
 }
 
