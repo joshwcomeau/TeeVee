@@ -29,8 +29,6 @@ if (Meteor.isServer) {
   });
 }
 
-
-
 if (Meteor.isClient) {
   Meteor.startup(function () {
     Meteor.typeahead.inject();
@@ -39,7 +37,6 @@ if (Meteor.isClient) {
 
   Template.episode_list.helpers({
     seasons: () => {
-      console.log("Getting seasons info")
       let show = Shows.findOne({ id: Session.get('show_id') });
       if (!show) return undefined;
 
@@ -57,9 +54,27 @@ if (Meteor.isClient) {
     }
 
   });
+  
+  Template.season.events({
+    'click .mark.all': function(ev) {
+      console.log("Season", this)
+      // Create a new copy of the episodes array, mark them all as seen.
+      let episodes = _.map(this, (episode) => {
+        console.log("Mapping ", episode);
+        episode.seen = true;
+        return episode;
+      });
+      
+      let show = Shows.findOne({ id: Session.get('show_id')});
+      Shows.update(show._id, {
+        $set: { episodes: episodes }
+      });
+
+    }
+  })
 
   Template.episode.events({
-    'change .episode-checkbox': function (ev) {
+    'change .episode-checkbox': function(ev) {
       
       // Check to see if this episode has a database entry already for this user
       let query = {
@@ -69,16 +84,15 @@ if (Meteor.isClient) {
       }
       
       // Update our local Collection
-      console.log(this);
       this.seen = $(ev.target).is(":checked");
-      // let show = Shows.findOne({ id: Session.get('show_id')})
-      // let episodes = show.episodes;
-      // let episode_index = _.findIndex(episodes, {id: this.id});
-      // episodes.splice(episode_index, 1, this)
-      // 
-      // Shows.update(show._id, {
-      //   $set: { episodes: episodes }
-      // });
+      let show = Shows.findOne({ id: Session.get('show_id')});
+      let episodes = show.episodes;
+      let episode_index = _.findIndex(episodes, {id: this.id});
+      episodes.splice(episode_index, 1, this);
+      
+      Shows.update(show._id, {
+        $set: { episodes: episodes }
+      });
       
       Meteor.call('ToggleSeenEpisode', query, $(ev.target).is(":checked"));      
     }

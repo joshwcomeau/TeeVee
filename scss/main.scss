@@ -153,21 +153,31 @@ header {
     display: none;
   }
   
+  
   button {
     background: none;
     border: none;
-    float: right;
-    margin-top: 1rem;
+    
+    &.all {
+      color: $olive;
+    }
+    &.none {
+      color: $pink;
+    }
   }
   
   ul {
     padding: 0.6rem 0;
     
     li {
-      position: relative;
-      padding: 0.25rem 0 0.25rem 1.5rem;
+      position: relative;              
       border-bottom: 1px solid rgba(0,0,0,0.1);
       
+      label {
+        padding: 0.25rem 0 0.25rem 1.5rem;
+        display: block;
+      }
+
       &.seen {
         color: $white;
         background: $olive;
@@ -177,6 +187,7 @@ header {
           position: absolute;
           width: 1.5rem;
           text-align: center;
+          top: 0.25rem;
           left: 0;
         }
         

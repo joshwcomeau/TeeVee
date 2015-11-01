@@ -23,7 +23,7 @@
 <template name='search'>
   <header class="card">
     <h1 class='logo'>Teevee</h1>
-    <input type='text' name='search_for_show' class='search-for-show typeahead' autocomplete='off' spellcheck='off' data-source='retrieveSuggestions' data-select='goToShow'>
+    <input type='text' name='search_for_show' class='search-for-show typeahead' autocomplete='off' spellcheck='off' data-source='retrieveSuggestions' data-select='goToShow' placeholder="Start Typing a Show...">
   </header>
 </template>
 
@@ -50,8 +50,9 @@
 
 
 <template name='season'>
-  <button type="button" class="mark-all">Mark All As Seen</button>
   <h4>Season {{this.[0].season}}</h4>
+  <button type="button" class="mark all">All</button> 
+  <button type="button" class="mark none">None</button>
   <ul>
     {{#each this}}
       {{> episode}}
