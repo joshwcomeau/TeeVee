@@ -1,0 +1,18 @@
+<template name='show_info'>
+  {{#if tv_show}}
+    <div class="card show-info">
+      <div class="show-image">
+        <img src="{{tv_show.image.original}}">
+      </div>
+      <div class="show-description">
+        <h4 class='show-name'>{{tv_show.name}}</h4>
+        <h6 class='show-genre'>{{formatted_genre}}</h6>
+        {{{tv_show.summary}}}
+        
+        <h6 class='show-status {{tv_show.status}}'>{{tv_show.status}}</h6>
+        
+      </div>
+      
+    </div>
+  {{/if}}
+</template>

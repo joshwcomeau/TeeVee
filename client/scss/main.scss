@@ -10,7 +10,7 @@ body {
 }
 
 input {
-  outline: none;  
+  outline: none;
   padding: 0.25rem;
   border-top: 1px solid rgba(0,0,0,0.04);
   border-left: 1px solid rgba(0,0,0,0.04);
@@ -139,15 +139,11 @@ header {
   
 }
 
-.episode-list {
+.season-list {
   -webkit-column-count: 2;
   -moz-column-count: 2;
   column-count: 2;
   
-  h4 {
-    font-size: 1.4rem;
-    margin-top: 1rem;
-  }
   
   input[type=checkbox] {
     display: none;
@@ -166,29 +162,53 @@ header {
     }
   }
   
+  .season {
+    -webkit-column-break-inside: avoid;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    padding: 1rem 0;
+    
+    h4 {
+      font-size: 1.4rem;
+      margin: 0;
+    }
+  }
+  
   ul {
     padding: 0.6rem 0;
     
     li {
-      position: relative;              
+      position: relative;
       border-bottom: 1px solid rgba(0,0,0,0.1);
       
       label {
-        padding: 0.25rem 0 0.25rem 1.5rem;
+        padding: 0.4rem 0;
         display: block;
       }
-
+      
+      &:before {
+        content: '✓';
+        position: absolute;
+        width: 0rem;
+        opacity: 0;
+        text-align: center;
+        top: 0.25rem;
+        left: 0;
+      }
+      
       &.seen {
         color: $white;
         background: $olive;
         
+        
+        label {
+          padding-left: 1.5rem;
+        }
+
         &:before {
-          content: '✓';
-          position: absolute;
           width: 1.5rem;
-          text-align: center;
-          top: 0.25rem;
-          left: 0;
+          opacity: 1;
+          transition: opacity 0.3s;
         }
         
         .show-formatted-season-episode {
@@ -207,4 +227,3 @@ header {
     color: #333;
   }
 }
-

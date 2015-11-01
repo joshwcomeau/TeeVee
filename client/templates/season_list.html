@@ -1,0 +1,11 @@
+<template name='season_list'>
+  {{#if seasons}}
+    <div class='card season-list'>
+      {{#each seasons}}
+        <div class='season'>
+          {{> season}}
+        </div>
+      {{/each}}
+    </div>
+  {{/if}}
+</template>
