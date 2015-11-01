@@ -1,4 +1,4 @@
-Episodes = new Mongo.Collection('episodes');
+_ = lodash;
 SeenEpisodes = new Mongo.Collection('seen_episodes');
 
 // Local-only Collection
@@ -22,7 +22,6 @@ const TV_API = {
 if (Meteor.isServer) {
   Meteor.methods({
     ToggleSeenEpisode: function(query, seen) {
-      console
       return SeenEpisodes.upsert(query, {
         $set: { seen: seen }
       });
@@ -69,6 +68,18 @@ if (Meteor.isClient) {
         episodeId:  this.id
       }
       
+      // Update our local Collection
+      console.log(this);
+      this.seen = $(ev.target).is(":checked");
+      // let show = Shows.findOne({ id: Session.get('show_id')})
+      // let episodes = show.episodes;
+      // let episode_index = _.findIndex(episodes, {id: this.id});
+      // episodes.splice(episode_index, 1, this)
+      // 
+      // Shows.update(show._id, {
+      //   $set: { episodes: episodes }
+      // });
+      
       Meteor.call('ToggleSeenEpisode', query, $(ev.target).is(":checked"));      
     }
   });
@@ -111,8 +122,7 @@ if (Meteor.isClient) {
       
       // Retrieve Show info and episodes
       let show_info_promise = get_show_info(suggestion.id);
-      let episodes_promise  = get_episodes(suggestion.id);
-      let seen_episodes_promise = fetch_seen_episodes(suggestion.id);
+      let episodes_promise      = get_episodes(suggestion.id);
       
       Promise.all([show_info_promise, episodes_promise]).then( (values) => {
         let show_info = values[0];
@@ -138,7 +148,6 @@ if (Meteor.isClient) {
 
           return trimmed_episode;
         });
-        console.log("Inserting shows")
         
         Shows.insert(trimmed_show);
         
@@ -171,10 +180,6 @@ if (Meteor.isClient) {
         resolve(response.data);
       });
     });
-  }
-  
-  function fetch_seen_episodes(show_id) {
-    
   }
 }
 

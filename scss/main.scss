@@ -1,7 +1,7 @@
 @import 'reset';
 @import 'variables';
 
-body, input, select, textarea {
+body, input, select, textarea, button {
   font-family: 'lato', sans-serif;
 }
 body {
@@ -149,13 +149,41 @@ header {
     margin-top: 1rem;
   }
   
+  input[type=checkbox] {
+    display: none;
+  }
+  
+  button {
+    background: none;
+    border: none;
+    float: right;
+    margin-top: 1rem;
+  }
+  
   ul {
     padding: 0.6rem 0;
     
     li {
-      padding: 0.25rem 0;
+      position: relative;
+      padding: 0.25rem 0 0.25rem 1.5rem;
       border-bottom: 1px solid rgba(0,0,0,0.1);
       
+      &.seen {
+        color: $white;
+        background: $olive;
+        
+        &:before {
+          content: '✓';
+          position: absolute;
+          width: 1.5rem;
+          text-align: center;
+          left: 0;
+        }
+        
+        .show-formatted-season-episode {
+          color: $offwhite;
+        }
+      }
       &:last-of-type {
         border-bottom: 0;
       }

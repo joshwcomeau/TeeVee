@@ -9,11 +9,11 @@
     
     <div class="authenticated {{#unless currentUser}}is-hidden{{/unless}}">
       {{> search }}  
-      {{> show_info }}
       
+      {{> show_info }}
       {{> episode_list }}
     </div>
-    <div class="unauthenticated {{#if currentUser}}is-hidden{{/if}}">
+    <div class="card authentication">
       {{> loginButtons}}
     </div>
       
@@ -47,6 +47,18 @@
 </template>
 
 
+
+
+<template name='season'>
+  <button type="button" class="mark-all">Mark All As Seen</button>
+  <h4>Season {{this.[0].season}}</h4>
+  <ul>
+    {{#each this}}
+      {{> episode}}
+    {{/each}}
+  </ul>
+</template>
+
 <template name='episode_list'>
   {{#if seasons}}
     <div class="card episode-list">
@@ -57,17 +69,8 @@
   {{/if}}
 </template>
 
-<template name='season'>
-  <h4>Season {{this.[0].season}}</h4>
-  <ul>
-    {{#each this}}
-      {{> episode}}
-    {{/each}}
-  </ul>
-</template>
-
 <template name='episode'>
-  <li>
+  <li class="{{#if seen}}seen{{/if}}">
     <input type='checkbox' name='{{name}}' id='{{id}}' checked='{{seen}}' class='episode-checkbox'>
     <label for='{{id}}'>
       <strong class='show-formatted-season-episode'>S{{season}}E{{number}}</strong> - <span class='show-name'>{{name}}</span>
