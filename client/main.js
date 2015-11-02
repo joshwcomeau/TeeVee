@@ -1,23 +1,9 @@
-_ = lodash;
-SeenEpisodes = new Mongo.Collection('seen_episodes');
-
 // Local-only Collections
 Shows     = new Mongo.Collection(null);
 Seasons   = new Mongo.Collection(null);
 Episodes  = new Mongo.Collection(null);
 
 // Using TVMAZE API for all TV show lookups.
-const TV_API = {
-  search: (query) => {
-    return `http://api.tvmaze.com/search/shows?q=${query}`;
-  },
-  get_show: (id) => {
-    return `http://api.tvmaze.com/shows/${id}`;
-  },
-  get_episodes: (id) => {
-    return `http://api.tvmaze.com/shows/${id}/episodes`;
-  }
-};
 
 
 Meteor.startup(function () {
@@ -87,7 +73,7 @@ Template.episode.events({
 Template.search.helpers({
   // Typeahead handler: Fetches TV show name and IDs from the API.
   retrieveSuggestions: function(query, sync, callback) {
-    Meteor.http.call("GET", TV_API.search(query), (err, response) => {
+    Meteor.http.call("GET", TV_MAZE.search(query), (err, response) => {
       if (err) return console.log("Found error:", err);
       
       // Format API response for typeahead list.
@@ -120,8 +106,8 @@ Template.search.helpers({
     // TODO: Cache the requested show info so I don't have to re-fetch every time.
     
     // Retrieve Show info and episodes
-    let show_info_promise = get_show_info(suggestion.id);
-    let episodes_promise  = get_episodes(suggestion.id);
+    let show_info_promise = API.get(TV_MAZE.shows(suggestion.id));
+    let episodes_promise  = API.get(TV_MAZE.episodes(suggestion.id));
     
     Promise.all([show_info_promise, episodes_promise]).then( (values) => {
       let show_info = values[0];
@@ -174,22 +160,3 @@ Template.search.helpers({
 
 
 
-// Private Client methods
-
-function get_show_info(show_id) {
-  return new Promise( (resolve, reject) => {
-    Meteor.http.call("GET", TV_API.get_show(show_id), (err, response) => {
-      if (err) return reject(err);
-      resolve(response.data);
-    });
-  });
-}
-
-function get_episodes(show_id) {
-  return new Promise( (resolve, reject) => {
-    Meteor.http.call("GET", TV_API.get_episodes(show_id), (err, response) => {
-      if (err) return reject(err);
-      resolve(response.data);
-    });
-  });
-}

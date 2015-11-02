@@ -1,5 +1,3 @@
-_ = lodash;
-SeenEpisodes = new Mongo.Collection('seen_episodes');
 
 Meteor.methods({
   ToggleSeenEpisode: function(query, seen) {
