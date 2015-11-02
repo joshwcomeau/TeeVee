@@ -64,7 +64,7 @@ Template.episode.events({
     
     // Update the DB on the server
     let query = {
-      userId:     Meteor.user()._id,
+      userId:     Meteor.userId(),
       showId:     this.showId,
       episodeId:  this.id
     }
@@ -100,7 +100,7 @@ Template.header.helpers({
   
   // Select a show; show all the episodes and their status
   selectShow: function(ev, suggestion, dataset) {
-    Router.go(`/shows/${suggestion.id}`);
+    Router.go('show', { id: suggestion.id });
   }
 });
 

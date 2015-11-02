@@ -1,0 +1,6 @@
+// Overwriting the default `accounts` meteor package styles.
+@import 'variables';
+
+#login-buttons-logout {
+  background: $olive;
+}
