@@ -3,11 +3,10 @@ Shows     = new Mongo.Collection(null);
 Seasons   = new Mongo.Collection(null);
 Episodes  = new Mongo.Collection(null);
 
-// Using TVMAZE API for all TV show lookups.
-
 
 Meteor.startup(function () {
   Meteor.typeahead.inject();
+  Meteor.subscribe('seen_episodes');
 });
 
 
