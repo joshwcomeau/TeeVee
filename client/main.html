@@ -3,19 +3,3 @@
   <link href='https://fonts.googleapis.com/css?family=Lato:400,900,300' rel='stylesheet' type='text/css'>
   <title>TeeVee</title>
 </head>
-
-<body>
-  <div class='wrapper'>
-    
-    <div class="authenticated {{#unless currentUser}}is-hidden{{/unless}}">
-      {{> search }}
-      
-      {{> show_info }}
-      {{> season_list }}
-    </div>
-    <div class="card authentication">
-      {{> loginButtons}}
-    </div>
-      
-  </div>
-</body>

@@ -30,6 +30,7 @@ input {
   max-width: 900px;
 }
 .card {
+  position: relative;
   margin-bottom: 1rem;
   border-radius: 3px;
   padding: 1rem;
@@ -41,8 +42,14 @@ input {
   display: none;
 }
 
+.loading {
+  padding: 4rem 1rem;
+}
+
 header {
   .logo {
+    display: block;
+    text-decoration: none;
     text-align: center;
     font-size: 4rem;
     font-weight: $fw-heavy;

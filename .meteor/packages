@@ -24,3 +24,4 @@ accounts-ui
 accounts-google
 erasaur:meteor-lodash
 iron:router
+sacha:spin

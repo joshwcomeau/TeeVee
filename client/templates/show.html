@@ -1,0 +1,8 @@
+<template name='show'>
+  {{#if currentUser}}
+    {{> show_info }}
+    {{> season_list }}
+  {{else}}
+    <h3>Sorry, you must be authenticated!</h3>
+  {{/if}}
+</template>

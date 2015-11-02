@@ -1,6 +1,6 @@
-<template name='search'>
-  <header class="card">
-    <h1 class='logo'>Teevee</h1>
+<template name='header'>
+  <header class='card'>
+    <a class='logo' href='{{pathFor 'home'}}'>Teevee</a>
     <input type='text' name='search_for_show' class='search-for-show typeahead' autocomplete='off' spellcheck='off' data-source='retrieveSuggestions' data-select='selectShow' placeholder="Start Typing a Show...">
   </header>
 </template>
