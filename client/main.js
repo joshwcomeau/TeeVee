@@ -18,6 +18,7 @@ Template.season_list.helpers({
     });
   },
   loaded: function() {
+    // TODO: Replace me with proper routing.
     return Session.get('show_id');
   }
 });
@@ -73,11 +74,9 @@ Template.episode.events({
 Template.search.helpers({
   // Typeahead handler: Fetches TV show name and IDs from the API.
   retrieveSuggestions: function(query, sync, callback) {
-    Meteor.http.call("GET", TV_MAZE.search(query), (err, response) => {
-      if (err) return console.log("Found error:", err);
-      
+    API.get(TV_MAZE.search(query)).then( (response) => {
       // Format API response for typeahead list.
-      let show_names = response.data.map( (result) => {
+      let show_names = response.map( (result) => {
         let show = result.show;
         
         // Show the country code as part of the name if not US.
@@ -92,6 +91,8 @@ Template.search.helpers({
       });
       
       return callback( show_names );
+    }, (err) => {
+      return console.log("Error fetching suggestions from TV api:", err);
     });
   },
   
