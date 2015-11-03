@@ -4,10 +4,6 @@ Seasons   = new Mongo.Collection(null);
 Episodes  = new Mongo.Collection(null);
 
 
-Meteor.startup(function () {
-  Meteor.typeahead.inject();
-});
-
 Template.layout.rendered = function() {
   Meteor.typeahead.inject();
 };
@@ -103,7 +99,3 @@ Template.header.helpers({
     Router.go('show', { id: suggestion.id });
   }
 });
-
-
-
-

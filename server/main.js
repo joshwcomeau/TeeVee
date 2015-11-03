@@ -1,4 +1,3 @@
-
 Meteor.methods({
   ToggleSeenEpisode: function(query, seen) {
     return SeenEpisodes.upsert(query, {

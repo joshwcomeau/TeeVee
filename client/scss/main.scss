@@ -1,5 +1,8 @@
+@import "{francocatena:compass}/compass";
+
 @import 'reset';
 @import 'variables';
+@import 'mixins';
 
 body, input, select, textarea, button {
   font-family: 'lato', sans-serif;
@@ -31,7 +34,7 @@ input {
 }
 .card {
   position: relative;
-  margin-bottom: 1rem;
+  margin: 1rem;
   border-radius: 3px;
   padding: 1rem;
   background: $white;
@@ -181,56 +184,71 @@ header {
     }
   }
   
-  ul {
-    padding: 0.6rem 0;
-    
-    li {
-      position: relative;
-      border-bottom: 1px solid rgba(0,0,0,0.1);
-      
-      label {
-        padding: 0.4rem 0;
-        display: block;
-      }
-      
-      &:before {
-        content: '✓';
-        position: absolute;
-        width: 0rem;
-        opacity: 0;
-        text-align: center;
-        top: 0.25rem;
-        left: 0;
-      }
-      
-      &.seen {
-        color: $white;
-        background: $olive;
-        
-        
-        label {
-          padding-left: 1.5rem;
-        }
+}
 
-        &:before {
-          width: 1.5rem;
-          opacity: 1;
-          transition: opacity 0.3s;
-        }
-        
-        .show-formatted-season-episode {
-          color: $offwhite;
-        }
-      }
-      &:last-of-type {
-        border-bottom: 0;
-      }
-    }
-  }
-  
+.episode-list {
+  padding: 0.6rem 0;
+
   .show-formatted-season-episode {
     font-size: 0.8rem;
     font-weight: $fw-heavy;
     color: #333;
   }
+
+  li {
+    position: relative;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    line-height: 2em;
+
+    &.seen {
+      background: $deco;
+    }
+    
+    &:last-of-type {
+      border-bottom: 0;
+    }
+  }
+    
+    
+  .episode-checkbox {
+    position: absolute;
+    opacity: 0;
+    
+    & + label {
+      position: relative;
+      cursor: pointer;
+      padding: 0;
+      display: block;
+    }
+    & + label:before {
+      content: '';
+      margin: 0 0.5rem;
+      display: inline-block;
+      vertical-align: text-top;
+      @include square(20px);
+      background: $offwhite;
+    }
+    &:checked + label:before {
+      background: $olive;
+    }
+    &:checked + label:after {
+      content: '';
+      position: absolute;
+      left: 14px;
+      top: 15px;
+      background: $white;
+      @include square(2px);
+      box-shadow:
+        2px 0 0 $white,
+        4px 0 0 $white,
+        4px -2px 0 $white,
+        4px -4px 0 $white,
+        4px -6px 0 $white;
+      @include rotate(45deg);
+    }
+
+
+    
+  }
+  
 }
