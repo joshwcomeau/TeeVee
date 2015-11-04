@@ -4,7 +4,7 @@
       <img src="{{image.original}}">
     </div>
     <div class="show-description">
-      <h4 class='show-name'>{{name}} <i class='fa fa-star-o'></i></h4>
+      <h4 class='show-name'>{{name}} <i class='fa fa-star-o {{#if starred}}starred{{/if}}'></i></h4>
       <h6 class='show-genre'>{{formatted_genre}}</h6>
       {{{summary}}}
       

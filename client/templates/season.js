@@ -1,9 +1,6 @@
 Template.season.helpers({
-  episodes: function() {
-    return Episodes.find({
-      showId: Session.get('show_id'),
-      season: this.number
-    });
+  season_num: function() {
+    return this[0].season;
   }
 });
 

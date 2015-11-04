@@ -1,7 +1,6 @@
-// Local-only Collections
-Shows     = new Mongo.Collection(null);
+// TODO: Remove this. Template logic!
 Seasons   = new Mongo.Collection(null);
-Episodes  = new Mongo.Collection(null);
+
 
 
 

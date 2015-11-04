@@ -1,7 +1,7 @@
 <template name='episode'>
   <li class="{{#if seen}}seen{{/if}}">
-    <input type='checkbox' name='{{name}}' id='{{id}}' checked='{{seen}}' class='episode-checkbox'>
-    <label for='{{id}}'>
+    <input type='checkbox' name='{{name}}' id='{{_id}}' checked='{{seen}}' class='episode-checkbox'>
+    <label for='{{_id}}'>
       <strong class='show-formatted-season-episode'>S{{season}}E{{number}}</strong> - <span class='show-name'>{{name}}</span>
     </label>
   </li>

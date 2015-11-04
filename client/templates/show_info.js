@@ -5,7 +5,7 @@ Template.show_info.helpers({
 });
 
 Template.show_info.events({
-  'mouseover i': function() {
-    console.log(this);
+  'click .starred': function() {
+    
   },
 })
