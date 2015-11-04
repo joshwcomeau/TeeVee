@@ -1,4 +1,6 @@
 <template name='show'>
-  {{> show_info }}
+  {{#with this}}
+    {{> show_info }}
+  {{/with}}
   {{> season_list }}
 </template>

@@ -116,11 +116,29 @@ header {
   .show-description {
     flex: 1;
     padding: 0 1.5rem;
-    
+        
     h4 {
       font-size: 2rem;
       color: $olive;
       font-weight: $fw-heavy;
+      
+      i {
+        margin-left: 0.5rem;
+        color: lighten($gray, 30%);
+        cursor: pointer;
+        
+        &:hover {
+          &:before {
+            // code for `fa-star`.
+            // Fills in on hover.
+            content: '\f005';
+          }
+        }
+        
+        &.starred {
+          color: $yellow !important;
+        }
+      }
     }
     h6 {
       font-size: 1.2rem;
@@ -226,7 +244,7 @@ header {
       display: inline-block;
       vertical-align: text-top;
       @include square(20px);
-      background: $offwhite;
+      background: rgba(0,0,0,0.1);
     }
     &:checked + label:before {
       background: $olive;
