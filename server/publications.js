@@ -1,4 +1,4 @@
-Meteor.publish('shows_api', function(show_id) {
+Meteor.publish('shows', function(show_id) {
   try {
     API.get( TV_MAZE.shows(show_id) ).then( (show) => {
       // Shows come with an 'id' field, but we're going to ditch that in favor
@@ -14,11 +14,21 @@ Meteor.publish('shows_api', function(show_id) {
   }
 });
 
-Meteor.publish('episodes_api', function(show_id) {
+Meteor.publish('episodes', function(show_id) {
   try {
     API.get( TV_MAZE.episodes(show_id) ).then( (episodes) => {
       episodes.forEach( (episode) => {
         let episode_id = episode.id;
+        
+        // Check if this user has seen this episode
+        if ( this.userId ) {
+          let seen_episode = SeenEpisodes.findOne({
+            userId: this.userId,
+            episodeId: episode_id
+          });
+          
+          episode.seen = seen_episode ? seen_episode.seen : false;
+        }
         
         // Add the show ID as a reference to the episode
         let episode_data = _.assign(
